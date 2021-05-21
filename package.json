@@ -1,0 +1,66 @@
+{
+    "devDependencies": {
+        "@babel/cli": "^7.8.4",
+        "@babel/core": "^7.12.10",
+        "@babel/node": "^7.12.10",
+        "@babel/plugin-transform-regenerator": "^7.12.1",
+        "@babel/plugin-transform-runtime": "^7.12.10",
+        "@babel/preset-env": "^7.8.4",
+        "@babel/register": "^7.12.10",
+        "@babel/runtime": "^7.12.5",
+        "babel-loader": "^8.0.6",
+        "babel-plugin-require-context-hook": "^1.0.0",
+        "babel-plugin-transform-runtime": "^6.23.0",
+        "babel-polyfill": "^6.26.0",
+        "babel-preset-es2015": "^6.24.1",
+        "babel-preset-stage-0": "^6.24.1",
+        "chai": "4.2.0",
+        "mocha": "8.1.3",
+        "mochawesome": "^6.2.1",
+        "playwright": "^1.10.0",
+        "google-spreadsheet": "3.1.15",
+        "websocket-as-promised": "2.0.1",
+        "websocket": "1.0.33",
+        "ua-parser-js": "^0.7.24",
+        "mongodb": "^3.6.5",
+        "chai-http": "^4.3.0",
+        "cross-var": "1.1.0",
+        "jsonpath": "^1.1.1"
+    },
+    "@comment scripts": {
+        "selGame": [
+            "Run specific game"
+        ],
+        "selGameSub": [
+            "Run sub test suites (Database, API, Manage page) of specific game"
+        ],
+        "full": [
+            "Run all test case in main test suites"
+        ],
+        "smoke": [
+            "Run only smoke test cases in main test suites"
+        ],
+        "p_full": [
+            "Parallel run all test case in main test suites"
+        ],
+        "p_smoke": [
+            "Parrallel run only smoke test cases in main test suites"
+        ],
+        "exportStatus": [
+            "Sync the lastest execution result to google sheet"
+        ],
+        "sendResultToTelegram": [
+            "Send the latest execution result to user via Telegram"
+        ]
+    },
+    "scripts": {
+        "selGame": "cross-var mocha --timeout 0 Games/$npm_config_game/*_Test.js -r @babel/register --file ./Setup.js --file ./Teardown.js  --reporter mochawesome --reporter-options reportDir=Report ",
+        "selGameSub": "",
+        "full": "cross-var mocha --timeout 0 Games/**/*_Test.js -r @babel/register --file ./Setup.js --file ./Teardown.js  --reporter mochawesome --reporter-options reportDir=Report ",
+        "smoke": "cross-var mocha --timeout 0 Games/**/*_Test.js  -r @babel/register  --fgrep Smoke_ --file ./Setup.js  --file ./Teardown.js  --reporter mochawesome --reporter-options reportDir=Report",
+        "p_full": "cross-var mocha --timeout 0 Games/**/*_Test.js -r @babel/register  --require ./configParallel.js Games/**/*_Test.js --parallel -j 3 --reporter mochawesome --require mochawesome/register --reporter-options reportDir=Report ",
+        "p_smoke": "cross-var mocha --timeout 0 Games/**/*_Test.js -r @babel/register  --fgrep Smoke --require ./configParallel.js Games/**/*_Test.js --parallel -j 3 --reporter mochawesome --require mochawesome/register --reporter-options reportDir=Report",
+        "exportStatus": "cross-var mocha --timeout 0 Games/MarkTestCase/MarkTestCase.js -r @babel/register",
+        "sendResultToTelegram": "cross-var mocha --timeout 0 Games/SendResultToTelegram/*.js -r @babel/register "
+    }
+}
