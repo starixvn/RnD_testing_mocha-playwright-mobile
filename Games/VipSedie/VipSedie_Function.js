@@ -19,14 +19,15 @@ export const waitToBlockBetting = async() => {
     return await uiUtils.waitToTime(VipSedieLocator.Timer,'5')
 }
 export const scrollToGame = async() => {
-    await page.$eval(VipSedieLocator.Title, el => el.scrollIntoView(true))
-    await uiUtils.clickEl(VipSedieLocator.Title)
+    // await uiUtils.waitEl(VipSedieLocator.Title)
+    await page.$eval(VipSedieLocator.Title, (el) => el.scrollIntoView(true))
+    // await uiUtils.clickEl(VipSedieLocator.Title)
 }
 
-export const verifyeSettlement = async(_choice,_chip) => {
+export const verifySettlement = async(_choice,_chip) => {
     let winloss =0
     // Wait to next Round
-    await waitToNextRound()
+    await uiUtils.shouldBeEqual(await waitToNextRound(),true)
     await placeBet(_choice,_chip)
     let currentBalance =  await GameLobbyFunc.getBalance()
     console.log(currentBalance)
@@ -40,7 +41,8 @@ export const verifyeSettlement = async(_choice,_chip) => {
     await uiUtils.shouldBeEqual(currentBalance + winloss , newBalance)
 }
 export const verifyStatisticBroad = async() => {
-    await waitToNextRound()
+    // Wait to next Round
+    await uiUtils.shouldBeEqual(await waitToNextRound(),true)
     let siStatisticBroad = [0,0,0,0,0]
     const elStatisticBroad = await page.$$(VipSedieLocator.StatisticScoreBoard)
     for(let i=0 ; i < elStatisticBroad.length; i++){
@@ -57,38 +59,63 @@ export const verifyStatisticBroad = async() => {
         await uiUtils.getText(VipSedieLocator.StatisticOdd),
         parseInt((siStatisticBroad[1]+siStatisticBroad[3])/elStatisticBroad.length*100)+'%'
     )
-    // 0
-    await uiUtils.shouldBeEqual(
-        await uiUtils.getText(VipSedieLocator.StatisticWhite4),
-        parseInt(siStatisticBroad[0]/elStatisticBroad.length*100)+'%'
-    )
-    // 0
-    await uiUtils.shouldBeEqual(
-        await uiUtils.getText(VipSedieLocator.StatisticWhite4),
-        parseInt(siStatisticBroad[0]/elStatisticBroad.length*100)+'%'
-    )
-    // 1
-    await uiUtils.shouldBeEqual(
-        await uiUtils.getText(VipSedieLocator.StatisticWhite3),
-        parseInt(siStatisticBroad[1]/elStatisticBroad.length*100)+'%'
-    )
-    // 2
-    await uiUtils.shouldBeEqual(
-        await uiUtils.getText(VipSedieLocator.StatisticRed2),
-        parseInt(siStatisticBroad[2]/elStatisticBroad.length*100)+'%'
-    )
-    // 3
-    await uiUtils.shouldBeEqual(
-        await uiUtils.getText(VipSedieLocator.StatisticRed3),
-        parseInt(siStatisticBroad[3]/elStatisticBroad.length*100)+'%'
-    )
-    // 4
-    await uiUtils.shouldBeEqual(
-        await uiUtils.getText(VipSedieLocator.StatisticRed4),
-        parseInt(siStatisticBroad[4]/elStatisticBroad.length*100)+'%'
-    )
 }
 
-export const verifyResultForLastRound = async () => {
+export const verifyTotalTimeOfARound = async() => {
+    // Wait to next Round
+    await uiUtils.shouldBeEqual(await uiUtils.waitToTime(VipSedieLocator.Timer,'29'),true)
+    const starttime = Date.now()
+    // Wait to next Round
+    await uiUtils.shouldBeEqual(await waitToNextRound(),true)
+    const endtime = Date.now()
+    let t = Math.round((endtime - starttime)/1000)
+    await uiUtils.shouldBeEqual(t === 39 || t === 40,true,`Verify total time of a round is 39s Failed, total time is: ${t}s`)
+}
+
+export const verifyShakingPlate = async() => {
+    // Wait to end Round
+    await uiUtils.shouldBeEqual(await uiUtils.waitToTime(VipSedieLocator.Timer,'01'),true)
+    const starttime = Date.now()
+    // Wait to shaking finish
+    await uiUtils.shouldBeEqual(await uiUtils.waitToTime(VipSedieLocator.WaitingTime,'05'),true)
+    const endtime = Date.now()
+    let t = Math.round((endtime - starttime)/1000)
+    await uiUtils.shouldBeEqual(t === 2 || t === 3,true,`Verify time for shaking plate is 3s Failed, total time is: ${t}s`)
+}
+
+export const verifyBetChoices = async() => {
+    const Choice = ['Even','Odd','Red4','Red3','Red2','White3','White4']
+    for(let choice of Choice){
+        await uiUtils.waitEl(VipSedieLocator[`${choice}`].Choice)
+        await uiUtils.shouldBeEqual(await uiUtils.getText(VipSedieLocator[`${choice}`].Odds),"1:"+VipSedieLocator.Odds[`${choice}`].toString()) 
+    }
+}
+
+export const verifyBlockBettingTime = async() => {
+    await GameLobbyFunc.placeBetAtBlockBettingTime(VipSedieLocator.Timer,VipSedieLocator.lblLockBet)
+}
+
+export const verifyBettingAtSettleTime = async() => {
+    // const Choice = ['Even','Odd','Red4','Red3','Red2','White3','White4']
+    // hard code bet on Event choice
+    await GameLobbyFunc.placeBetOnSettleTime(VipSedieLocator.Even.Choice,VipSedieLocator.WaitingTime,VipSedieLocator.lblMessage)
+}
+
+export const verifyMinBet = async() => {
+    await GameLobbyFunc.selectChip(1)
+    const Choice = ['Even','Odd','Red4','Red3','Red2','White3','White4']
+    await waitToNextRound()
+    for(let choice of Choice){
+        await GameLobbyFunc.minMaxBet(VipSedieLocator[`${choice}`].Choice,VipSedieLocator.Timer,VipSedieLocator.lblMessage,VipSedieLocator.msgMinBet+VipSedieLocator[`${choice}`].minMaxBet[0])
+    }
+}
+
+export const verifyMaxBet = async() => {
+    await GameLobbyFunc.selectChip(3000)
+    const Choice = ['Even','Odd','Red4','Red3','Red2','White3','White4']
+    for(let choice of Choice){
+        await waitToNextRound()
+        await GameLobbyFunc.minMaxBet(VipSedieLocator[`${choice}`].Choice,VipSedieLocator.Timer,VipSedieLocator.lblMessage,VipSedieLocator.msgMaxBet+VipSedieLocator[`${choice}`].minMaxBet[1])
+    }
 
 }

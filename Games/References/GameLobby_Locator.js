@@ -26,5 +26,9 @@ export const GameLobbyLocator = {
             offColor : 'linear-gradient(90deg, rgb(173, 173, 173), rgb(216, 216, 216) 64.29%)',
             onColor : 'linear-gradient(90deg, rgb(16, 156, 51), rgb(57, 234, 102) 64.29%)'
         }
+    },
+    Message : {
+        betOnNextRound : "Vui lòng đặt cược ở phiên sau.",
+        stopPlaceBet : "Dừng nhận cược"
     }
 }

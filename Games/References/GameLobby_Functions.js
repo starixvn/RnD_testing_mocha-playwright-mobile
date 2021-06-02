@@ -96,7 +96,42 @@ export const placeBet = async(_elChoice,_elTime,_elOwnBet,_chip) => {
         await uiUtils.sleep(1000)
     }
     // Verify Bet success
-    await uiUtils.shouldBeEqual(await uiUtils.getText(_elOwnBet), _chip.toString())
+    await uiUtils.shouldBeEqual((await uiUtils.getText(_elOwnBet)).replace(',',''), _chip.toString())
     await uiUtils.shouldBeEqual(currentBalance - _chip , await getBalance())
 }
 
+export const minMaxBet = async(_elChoice,_elTime,_elWarning,_notice) => {
+    await selectChip(_chip)
+    for( let i= 0; i < config.setting.loop; i++) {
+        if(parseInt(await uiUtils.getText(_elTime)) > 10) {
+            const flag = await isOnQuickBet()
+            for( let j = 0 ; j < 2 ; j++ ){
+                await uiUtils.clickEl(_elChoice)
+                if(flag === false ) { 
+                    await uiUtils.clickEl(GameLobbyLocator.QuickBetAccept) 
+                }    
+            await uiUtils.sleep(500)
+            }
+            i = config.setting.loop
+        }
+        await uiUtils.sleep(1000)
+    }
+    // Verify Warning Message
+    await uiUtils.shouldBeEqual(await uiUtils.getText(_elWarning),_notice,`Don't see "${_notice}" messsage`)
+}
+
+export const placeBetAtBlockBettingTime = async (_elTime, _elBlockBet) => {
+    await uiUtils.shouldBeEqual(await uiUtils.waitToTime(_elTime,'05'),true)
+    await uiUtils.shouldBeEqual(await uiUtils.getText(_elBlockBet),GameLobbyLocator.Message.stopPlaceBet," Missing Block bet message")
+}
+
+export const placeBetOnSettleTime = async (_elChoice, _elTime, _elWarning) => {
+    await uiUtils.shouldBeEqual(await uiUtils.waitToTime(_elTime,'01'),true)
+    const flag = await isOnQuickBet()
+    await uiUtils.clickEl(_elChoice)
+    if(flag === false ) { 
+        await uiUtils.clickEl(GameLobbyLocator.QuickBetAccept) 
+    }
+    // Verify Warning Message
+    await uiUtils.shouldBeEqual(await uiUtils.getText(_elWarning),GameLobbyLocator.Message.betOnNextRound,`Don't see "${GameLobbyLocator.Message.betOnNextRound}" messsage`)
+}

@@ -16,7 +16,7 @@ export const login_local = async(_env,_game) => {
             const obj = JSON.parse(res.text);
             await uiUtils.navigate(obj.redirectUrl)
         })
-        await uiUtils.sleep(7000)//Wait for login process
+        // await uiUtils.sleep(7000)//Wait for login process
     } catch (error) {
         console.error(error.message)
     }
