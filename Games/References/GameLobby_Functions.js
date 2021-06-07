@@ -79,13 +79,33 @@ export const isOnQuickBet = async() => {
     return false
 }
 export const getBalance = async() => {
-    return parseFloat(/([0-9,]+)/ig.exec(await uiUtils.getText(GameLobbyLocator.Balance))[1].replace(',',''))
+    return parseFloat(/([0-9,.]+)/ig.exec(await uiUtils.getText(GameLobbyLocator.Balance))[1].replace(',',''))
 }
-export const placeBet = async(_elChoice,_elTime,_elOwnBet,_chip) => {
+export const verifyPlaceBet = async(_elChoice,_elTime,_elOwnBet,_chip) => {
     await selectChip(_chip)
-    let currentBalance = await getBalance()
+    let currentBalance
     for( let i= 0; i < config.setting.loop; i++) {
+        await uiUtils.sleep(1000)
         if(parseInt(await uiUtils.getText(_elTime)) > 7) {
+            const flag = await isOnQuickBet()
+            currentBalance = await getBalance()
+            await uiUtils.clickEl(_elChoice)
+            if(flag === false ) { 
+                await uiUtils.clickEl(GameLobbyLocator.QuickBetAccept) 
+            }
+            i = config.setting.loop
+        }
+    }
+    await uiUtils.sleep(1000)
+    // Verify Bet success
+    await uiUtils.shouldBeEqual((await uiUtils.getText(_elOwnBet)).replace(',',''), _chip.toString())
+    await uiUtils.shouldBeEqual(currentBalance - _chip , await getBalance())
+}
+export const placeBet = async(_elChoice,_elTime,_chip,_adjTime = 7) => {
+    await selectChip(_chip)
+    for( let i= 0; i < config.setting.loop; i++) {
+        await uiUtils.sleep(1000)
+        if(parseInt(await uiUtils.getText(_elTime)) > _adjTime) {
             const flag = await isOnQuickBet()
             await uiUtils.clickEl(_elChoice)
             if(flag === false ) { 
@@ -93,31 +113,20 @@ export const placeBet = async(_elChoice,_elTime,_elOwnBet,_chip) => {
             }
             i = config.setting.loop
         }
-        await uiUtils.sleep(1000)
     }
-    // Verify Bet success
-    await uiUtils.shouldBeEqual((await uiUtils.getText(_elOwnBet)).replace(',',''), _chip.toString())
-    await uiUtils.shouldBeEqual(currentBalance - _chip , await getBalance())
 }
 
-export const minMaxBet = async(_elChoice,_elTime,_elWarning,_notice) => {
-    await selectChip(_chip)
-    for( let i= 0; i < config.setting.loop; i++) {
-        if(parseInt(await uiUtils.getText(_elTime)) > 10) {
-            const flag = await isOnQuickBet()
-            for( let j = 0 ; j < 2 ; j++ ){
-                await uiUtils.clickEl(_elChoice)
-                if(flag === false ) { 
-                    await uiUtils.clickEl(GameLobbyLocator.QuickBetAccept) 
-                }    
-            await uiUtils.sleep(500)
-            }
-            i = config.setting.loop
-        }
-        await uiUtils.sleep(1000)
+export const minMaxBet = async(_elChoice,_elTime,_elWarning,_notice, _isMin = false) => {
+    let loopBet = 1
+    let _chip = 1
+    if(_isMin === false) _chip = 3000
+    if(_isMin === false) loopBet = 2
+    for(let i=0; i < loopBet; i++) {
+        await placeBet(_elChoice,_elTime,_chip,10)
+        await uiUtils.sleep(500)
     }
     // Verify Warning Message
-    await uiUtils.shouldBeEqual(await uiUtils.getText(_elWarning),_notice,`Don't see "${_notice}" messsage`)
+    await uiUtils.shouldBeEqual((await uiUtils.getText(_elWarning)).replace(',',''),_notice,`Don't see "${_notice}" messsage`)
 }
 
 export const placeBetAtBlockBettingTime = async (_elTime, _elBlockBet) => {
@@ -134,4 +143,17 @@ export const placeBetOnSettleTime = async (_elChoice, _elTime, _elWarning) => {
     }
     // Verify Warning Message
     await uiUtils.shouldBeEqual(await uiUtils.getText(_elWarning),GameLobbyLocator.Message.betOnNextRound,`Don't see "${GameLobbyLocator.Message.betOnNextRound}" messsage`)
+}
+
+export const verifyMaxPerRound = async(_elChoice1,_elChoice2,_elTime,_elWarning,_notice,_chip=2000)=> {
+    await placeBet(_elChoice1,_elTime,_chip,10)
+    await uiUtils.sleep(500)
+    await placeBet(_elChoice2,_elTime,_chip)
+    // Verify Warning Message
+    await uiUtils.shouldBeEqual(await uiUtils.getText(_elWarning),_notice,`Don't see "${_notice}" messsage`)
+}
+export const selectMenu = async(_elMenu,_elOption,_elVerify,_txtVerify) => {
+    await uiUtils.clickEl(_elMenu)
+    await uiUtils.clickEl(_elOption)
+    await uiUtils.shouldBeEqual(await uiUtils.getText(_elVerify),_txtVerify)
 }

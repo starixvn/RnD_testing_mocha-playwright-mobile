@@ -29,6 +29,6 @@ export const GameLobbyLocator = {
     },
     Message : {
         betOnNextRound : "Vui lòng đặt cược ở phiên sau.",
-        stopPlaceBet : "Dừng nhận cược"
+        stopPlaceBet : "Dừng nhận cược",
     }
 }

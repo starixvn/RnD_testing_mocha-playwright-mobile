@@ -27,7 +27,7 @@ export const Translate = {
 }
 
 export const cf_local ={
-   url: "http://gamelobby-simulator.lumigame.com/signin",
+   url: "https://gamelobby-simulator.lumigame.com/signin",
    usernameSSO: "",
    memberId: {
         BlackJack : "1001080",
@@ -45,12 +45,12 @@ export const cf_local ={
    },
    password: "",
    gamelobbyurl: "",
-   retrieveEndGame : "http://owapi-simulator.lumigame.com/SabaClub/RetrieveEndGameInfo",
-   setBalance : "http://owapi-simulator.lumigame.com/SabaClub/CreateCustomer"
+   retrieveEndGame : "https://owapi-simulator.lumigame.com/SabaClub/RetrieveEndGameInfo",
+   setBalance : "https://owapi-simulator.lumigame.com/SabaClub/CreateCustomer"
 }
 
 export const cf_local1 ={
-   url: "http://l1-glbs1.lumigame.com/signin",
+   url: "https://l1-glbs1.lumigame.com/signin",
    usernameSSO: "",
    memberId: {
         BlackJack : "1001080",
@@ -68,12 +68,12 @@ export const cf_local1 ={
    },
    password: "",
    gamelobbyurl: "",
-   retrieveEndGame : "http://l1-ows1.lumigame.com/SabaClub/RetrieveEndGameInfo",
-   setBalance : "http://l1-ows1.lumigame.com/SabaClub/CreateCustomer"
+   retrieveEndGame : "https://l1-ows1.lumigame.com/SabaClub/RetrieveEndGameInfo",
+   setBalance : "https://l1-ows1.lumigame.com/SabaClub/CreateCustomer"
 }
 
 export const cf_local2 ={
-   url: "http://l1-glbs2.lumigame.com/signin",
+   url: "https://l1-glbs2.lumigame.com/signin",
    usernameSSO: "",
    memberId: {
         BlackJack : "1001080",
@@ -91,8 +91,8 @@ export const cf_local2 ={
    },
    password: "",
    gamelobbyurl: "",
-   retrieveEndGame : "http://l1-ows2.lumigame.com/SabaClub/RetrieveEndGameInfo",
-   setBalance : "http://l1-ows2.lumigame.com/SabaClub/CreateCustomer"
+   retrieveEndGame : "https://l1-ows2.lumigame.com/SabaClub/RetrieveEndGameInfo",
+   setBalance : "https://l1-ows2.lumigame.com/SabaClub/CreateCustomer"
 }
 
 export const cf_sit ={
