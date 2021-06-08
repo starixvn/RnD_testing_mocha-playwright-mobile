@@ -4,12 +4,14 @@ import { waitToTime } from '../../utils/uiUtils'
 import * as MemberSiteFunc from '../References/MemberSite_Function'
 import * as VipSedieFunc from './VipSedie_Function'
 
-describe('Vip Game Mobile',()=>{
+describe('Vip Sedie Game Mobile',()=>{
 
     before(async function(){
         await MemberSiteFunc.Login(game)
         await VipSedieFunc.verifyLoginSuccessfully()
         await VipSedieFunc.scrollToGame()
+        await VipSedieFunc.onQuickBet()
+        
     }) 
     afterEach(async function(){
         if(this.currentTest.state == 'failed'){

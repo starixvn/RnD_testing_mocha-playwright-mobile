@@ -24,7 +24,7 @@ export const isAvailableBet = async() => {
 }
 export const scrollToGame = async() => {
     // await uiUtils.waitEl(VipSedieLocator.Title)
-    await page.$eval(VipSedieLocator.Title, (el) => el.scrollIntoView({block: "nearest"}))
+    await page.$eval(VipSedieLocator.Title, (el) => el.scrollIntoView(true))
     // await uiUtils.clickEl(VipSedieLocator.Title)
 }
 
@@ -236,4 +236,8 @@ export const verifyGuide = async()=> {
     await uiUtils.shouldBeEqual(await uiUtils.getText(VipSedieLocator.Guide.Text),VipSedieLocator.VerifyText.vi.GuideContent)
     // await uiUtils.shouldBeEqual("abc",(await uiUtils.getText(VipSedieLocator.Guide.Text)).toString())
     await closePopup()
+}
+
+export const onQuickBet = async()=> {
+    if(await GameLobbyFunc.isOnQuickBet()  === true) await GameLobbyFunc.swicthQuickBet() 
 }

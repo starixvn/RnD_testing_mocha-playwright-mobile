@@ -23,7 +23,7 @@ export const isAvailableBet = async() => {
 }
 export const scrollToGame = async() => {
     // await uiUtils.waitEl(SedieLocator.Title)
-    await page.$eval(SedieLocator.Title, (el) => el.scrollIntoView({block: "nearest"}))
+    await page.$eval(SedieLocator.Title, (el) => el.scrollIntoView(true))
     // await uiUtils.clickEl(SedieLocator.Title)
 }
 
@@ -109,17 +109,6 @@ export const verifyBettingAtSettleTime = async() => {
     // const Choice = ['Even','Odd','Red4','Red3','Red2','White3','White4']
     // hard code bet on Event choice
     await GameLobbyFunc.placeBetOnSettleTime(SedieLocator.Even.Choice,SedieLocator.WaitingTime,SedieLocator.lblMessage)
-}
-
-export const verifyMinBet = async() => {
-    await GameLobbyFunc.selectChip(1)
-    const Choice = ['Even','Odd','Red4','Red3','Red2','White3','White4']
-    await waitToNextRound()
-    for(let choice of Choice){
-        // if(await isAvailableBet() === false) await waitToNextRound()
-        await GameLobbyFunc.minMaxBet(SedieLocator[`${choice}`].Choice,SedieLocator.Timer,SedieLocator.lblMessage,SedieLocator.msgMinBet+SedieLocator[`${choice}`].minMaxBet[0],true)
-        await uiUtils.sleep(4500)
-    }
 }
 
 export const verifyMaxBet = async()=> {
@@ -235,4 +224,8 @@ export const verifyGuide = async()=> {
     await uiUtils.shouldBeEqual(await uiUtils.getText(SedieLocator.Guide.Text),SedieLocator.VerifyText.vi.GuideContent)
     // await uiUtils.shouldBeEqual("abc",(await uiUtils.getText(SedieLocator.Guide.Text)).toString())
     await closePopup()
+}
+
+export const onQuickBet = async()=> {
+    if(await GameLobbyFunc.isOnQuickBet()  === true) await GameLobbyFunc.swicthQuickBet() 
 }
