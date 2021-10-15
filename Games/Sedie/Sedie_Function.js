@@ -5,10 +5,10 @@ export const verifyPlaceBet = async(_choice,_chip) => {
     await GameLobbyFunc.verifyPlaceBet(SedieLocator[`${_choice}`].Choice,SedieLocator.Timer,SedieLocator[`${_choice}`].OwnBet,_chip)
 }
 export const placeBet = async(_choice,_chip) => {
-    await GameLobbyFunc.placeBet(SedieLocator[`${_choice}`].Choice,SedieLocator.Timer,SedieLocator[`${_choice}`].OwnBet,_chip)
+    await GameLobbyFunc.placeBet(SedieLocator[`${_choice}`].Choice,SedieLocator.Timer,_chip)
 }
 export const verifyLoginSuccessfully = async() => {
-    await uiUtils.waitEl(SedieLocator.Title)
+    await uiUtils.shouldBeEqual(await uiUtils.getText(SedieLocator.Title), SedieLocator.VerifyText.vi.Title)
 }
 export const getRoundId = async() => {
     return await uiUtils.getText(SedieLocator.RoundId)
@@ -33,13 +33,13 @@ export const verifySettlement = async(_choice,_chip) => {
     await uiUtils.shouldBeEqual(await waitToNextRound(),true)
     await verifyPlaceBet(_choice,_chip)
     let currentBalance =  await GameLobbyFunc.getBalance()
-    console.log(currentBalance)
+    // console.log(currentBalance)
     // Wait to next Round
     await waitToNextRound()
     let newBalance = await GameLobbyFunc.getBalance()
-    console.log(newBalance)
+    // console.log(newBalance)
     if(await uiUtils.isWin(SedieLocator[`${_choice}`].Choice) === true) {
-        winloss = _chip * SedieLocator.Odds[`${_choice}`]
+        winloss = Math.round((_chip * SedieLocator.Odds[`${_choice}`])*100)/100
     }
     await uiUtils.shouldBeEqual(currentBalance + winloss , newBalance)
 }
@@ -150,7 +150,7 @@ export const verifyLastRoundResult = async()=> {
     await uiUtils.clickEl(SedieLocator.LastRoundHistory)
     // Verify Selector
     // Round ID
-    console.log(await uiUtils.getText(SedieLocator.ToolTips.lblRound))
+    // console.log(await uiUtils.getText(SedieLocator.ToolTips.lblRound))
     await uiUtils.shouldBeEqual(await uiUtils.getText(SedieLocator.ToolTips.lblRound),await roundId,"RoundID is incorrect")
     // Result
     await uiUtils.shouldBeEqual(await uiUtils.getText(SedieLocator.ToolTips.lblResult), result)
@@ -161,10 +161,18 @@ export const verifyLastRoundResult = async()=> {
 }
 
 export const openGameHistory = async() => {
-    await GameLobbyFunc.selectMenu(SedieLocator.btnMenu,SedieLocator.btnHistory,SedieLocator.History.Title,SedieLocator.VerifyText.vi.History)
+    await GameLobbyFunc.openHistory()
+    await GameLobbyFunc.selectGameOnHistory("Sedie")
+}
+export const closeGameHistory = async() => {
+    await GameLobbyFunc.closeHistory()
 }
 export const openGameGuide = async()=> {
-    await GameLobbyFunc.selectMenu(SedieLocator.btnMenu,SedieLocator.btnGuide,SedieLocator.Guide.Title,SedieLocator.VerifyText.vi.Guide)
+    await GameLobbyFunc.openGuide()
+    await GameLobbyFunc.selectGameOnGuide("Sedie")
+}
+export const closeGameGuide = async() => {
+    await GameLobbyFunc.closeGuide()
 }
 
 export const closePopup = async() => {
@@ -183,9 +191,9 @@ export const verifyGameHistory = async(_choice,_chip) => {
     await uiUtils.shouldBeEqual(await waitToNextRound(),true)
     let newBalance = await GameLobbyFunc.getBalance()
     if(await uiUtils.isWin(SedieLocator[`${_choice}`].Choice) === true) {
-        winloss = _chip * SedieLocator.Odds[`${_choice}`]
+        winloss = Math.round((_chip * SedieLocator.Odds[`${_choice}`])*100)/100
     }
-    await uiUtils.shouldBeEqual(currentBalance + winloss , newBalance)
+    await uiUtils.shouldBeEqual(Math.round((currentBalance + winloss )*100)/100, newBalance)
     for(let i = 0; i< Choice.length; i++) {
         if (await uiUtils.isWin(SedieLocator[`${Choice[i]}`].Choice) === true ) {
             resultIndex = i
@@ -193,7 +201,6 @@ export const verifyGameHistory = async(_choice,_chip) => {
         }
     }
     await openGameHistory()
-
     // Verify result on History
     // RoundID
     await uiUtils.shouldBeEqual("#"+await uiUtils.getText(SedieLocator.History.LastRound),roundId)
@@ -204,8 +211,8 @@ export const verifyGameHistory = async(_choice,_chip) => {
     // Stake
     await uiUtils.shouldBeEqual(await uiUtils.getText(SedieLocator.History.LastStake),_chip.toString())
     // Winloss
-    await uiUtils.shouldBeEqual(await uiUtils.getText(SedieLocator.History.LastWinLoss).winloss)
-    await closePopup()
+    await uiUtils.shouldBeEqual(await uiUtils.getText(SedieLocator.History.LastWinLoss),winloss.toString())
+    await closeGameHistory()
 }
 
 export const verifyHistory = async(_chip) => {
@@ -220,12 +227,11 @@ export const verifyHistory = async(_chip) => {
 
 export const verifyGuide = async()=> {
     await openGameGuide()
-    // console.log(await uiUtils.getText(SedieLocator.Guide.Text))
-    await uiUtils.shouldBeEqual(await uiUtils.getText(SedieLocator.Guide.Text),SedieLocator.VerifyText.vi.GuideContent)
-    // await uiUtils.shouldBeEqual("abc",(await uiUtils.getText(SedieLocator.Guide.Text)).toString())
-    await closePopup()
+    const content = await uiUtils.getContentFrame(SedieLocator.Guide.Frame, SedieLocator.Guide.Text)
+    await uiUtils.shouldBeEqual(content,SedieLocator.VerifyText.vi.GuideContent)
+    await closeGameGuide()
 }
 
 export const onQuickBet = async()=> {
-    if(await GameLobbyFunc.isOnQuickBet()  === true) await GameLobbyFunc.swicthQuickBet() 
+    if(isQB  === false) await GameLobbyFunc.swicthQuickBet() 
 }

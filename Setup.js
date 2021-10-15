@@ -18,11 +18,12 @@ before(async () => {
       device = (typeof args.device !== 'undefined') ? playwright.devices[args.device] : playwright.devices['iPad Mini']
       global.browser = await playwright.chromium.launch({
          headless: config.setting.headless ,
-        //  args: ['--disable-dev-shm-usage', '--no-sandbox', '--disable-gpu', '--use-gl=swiftshader','--enable-webgl']
+        //  args: ['--remote-debugging-port=9222'],
+         args: ['--disable-dev-shm-usage', '--no-sandbox', '--disable-gpu', '--use-gl=swiftshader','--enable-webgl']
         })
       context = await browser.newContext(device);
     }
-    
+
     let page = await context.newPage()
     const getUA = await page.evaluate(() => navigator.userAgent);
     let pages = []
@@ -41,31 +42,9 @@ before(async () => {
     global.theme = (typeof args.theme !== 'undefined') ? args.theme : 'light'
     global.expect = expect
     global.wsMessageReceived = []
+    global.isQB = false
     // console.log(process.argv)
-    // Set balance on Local
-    if(typeof process.env.npm_config_game !== 'undefined'){
-      global.game = process.env.npm_config_game
-      // Set balance on Local
-      if(env === 'cf_local' || env === 'cf_local1'){
-        chai.request(config[env].setBalance).post("").send(
-          `ObCustId=${config[env].memberId[game]}&Balance=200000.00&MinBet=1.00&MaxBet=3000.00`
-        ).end( async(err,res)=>{
-          expect(res).to.have.status(200)
-        })
-      }
-    } else {
-      // Set balance on Local
-      if(env === 'cf_local' || env === 'cf_local1'){
-        const aMemberID = Object.values(config[env].memberId)
-        for( let i =0 ; i< aMemberID.length;i++){
-          chai.request(config[env].setBalance).post("").send(
-            `ObCustId=${aMemberID[i]}&Balance=200000.00&MinBet=1.00&MaxBet=3000.00`
-          ).end( async(err,res)=>{
-            expect(res).to.have.status(200)
-          })
-        }
-      }
-    }
+    
     
 })
 

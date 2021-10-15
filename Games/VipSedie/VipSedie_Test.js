@@ -22,7 +22,6 @@ describe('Vip Sedie Game Mobile',()=>{
     })
     it('TC001_Full_Smoke_Verify Time of a round', async () => {
         await VipSedieFunc.verifyTotalTimeOfARound()
-        await VipSedieFunc.verifyShakingPlate()
     })  
     it('TC002_Full_Smoke_Verify bet choies', async()=> {
         await VipSedieFunc.verifyBetChoices()
@@ -47,13 +46,17 @@ describe('Vip Sedie Game Mobile',()=>{
             }
         }
     })
-    it('TC004_Full_Smoke_Verify betting at block betting time', async()=> {
-        await VipSedieFunc.verifyBlockBettingTime()
-    })
 
-    it('TC005_Full_Smoke_Verify betting at settlement time', async() => {
-        await VipSedieFunc.verifyBettingAtSettleTime()
-    })
+
+
+    // it('TC004_Full_Smoke_Verify betting at block betting time', async()=> {
+    //     await VipSedieFunc.verifyBlockBettingTime()
+    // })
+
+    // it('TC005_Full_Smoke_Verify betting at settlement time', async() => {
+    //     await VipSedieFunc.verifyBettingAtSettleTime()
+    // })
+
 
     it('TC006_Full_Smoke_Verify Min Max Bet', async()=> {
         await VipSedieFunc.verifyMinBet()

@@ -28,7 +28,7 @@ export const waitEl = async(_el,_state='visible')=> {
          } catch (error) {
             console.error(error.message);
             // this.screenFail()
-            await shouldBeEqual(true,false,"Timeout - wait for Selector can be visible")
+            await shouldBeEqual(true,false,`Timeout - wait for Selector can be visible`)
          }  
 }
 export const clickEl= async(_el)=> {
@@ -113,13 +113,14 @@ export const switchTabs = async(_index) => {
         await shouldBeEqual(true,false,"Error - switch Tab")
     }
 }
-export const swipe = async(__fx, _fy,__tx, _ty,) => {
+export const swipe = async(__el,__tx, _ty,) => {
     // swipe to left ( fy-ty < 0 ) or right ( fy-ty >0 )
     try {
-        await page.mouse.move(__fx,  _fy)
+        const { x, y } = await (await page.$(__el)).boundingBox();
+        await page.mouse.move(x,  y)
         await page.mouse.down();
         await sleep(500)
-        await page.mouse.move(__tx,  _ty)
+        await page.mouse.move(x + __tx,y + _ty)
         await sleep(1000)
         await page.mouse.up()
     } catch (error) {
@@ -171,4 +172,12 @@ export const waitToTime = async(_elTimer,_time) => {
 export const isWin = async(_elChoice) => {
     let tmp = await getAttribute(_elChoice,'class')
     return await tmp.includes('winning')
+}
+
+export const getContentFrame = async(_iframe,_el) => {
+    const content = await (await page.frame(_iframe)).textContent(_el)
+    return content
+}
+export const returnMainPage = async() => {
+    await page.mainFrame()
 }

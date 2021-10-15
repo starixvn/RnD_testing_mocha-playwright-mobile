@@ -5,7 +5,7 @@ export const setting = {
        width : 1280,
        height : 720
    },
-   timeout : 60000,
+   timeout : 65000,
    loop : 90,
    headless: false,
 }
@@ -46,7 +46,9 @@ export const cf_local ={
    password: "",
    gamelobbyurl: "",
    retrieveEndGame : "https://owapi-simulator.lumigame.com/SabaClub/RetrieveEndGameInfo",
-   setBalance : "https://owapi-simulator.lumigame.com/SabaClub/CreateCustomer"
+   setBalance : "https://owapi-simulator.lumigame.com/SabaClub/CreateCustomer",
+   origin : "https://l1-m.lumigame.com",
+   proxy: "https://l1-proxy.lumigame.com"
 }
 
 export const cf_local1 ={
@@ -69,7 +71,9 @@ export const cf_local1 ={
    password: "",
    gamelobbyurl: "",
    retrieveEndGame : "https://l1-ows1.lumigame.com/SabaClub/RetrieveEndGameInfo",
-   setBalance : "https://l1-ows1.lumigame.com/SabaClub/CreateCustomer"
+   setBalance : "https://l1-ows1.lumigame.com/SabaClub/CreateCustomer",
+   origin : "https://l1-m1.lumigame.com",
+   proxy: "https://l1-proxy1.lumigame.com",
 }
 
 export const cf_local2 ={
@@ -77,13 +81,13 @@ export const cf_local2 ={
    usernameSSO: "",
    memberId: {
         BlackJack : "1001080",
-        Sedie : "1001081",
+        Sedie : "561896",
         VipSedie : "1001082",
         Sicbo:  "1001083",
         Keno:  "1001084",
         Baccarat:  "1001085",
         Roulette:  "1001086",
-        BigSmall : "1001087",
+        BigSmall : "1001387",
         MiniSedie: "1001088",
         TurboBigSmall: "1001089",
         TurboOddEven: "1001090",
@@ -92,7 +96,9 @@ export const cf_local2 ={
    password: "",
    gamelobbyurl: "",
    retrieveEndGame : "https://l1-ows2.lumigame.com/SabaClub/RetrieveEndGameInfo",
-   setBalance : "https://l1-ows2.lumigame.com/SabaClub/CreateCustomer"
+   setBalance : "https://l1-ows2.lumigame.com/SabaClub/CreateCustomer",
+   origin : "https://l1-m2.lumigame.com",
+   proxy: "https://l1-proxy2.lumigame.com",
 }
 
 export const cf_sit ={

@@ -20,7 +20,6 @@ describe('Sedie Game Mobile',()=>{
     })
     it('TC001_Full_Smoke_Verify Time of a round', async () => {
         await SedieFunc.verifyTotalTimeOfARound()
-        await SedieFunc.verifyShakingPlate()
     })  
     it('TC002_Full_Smoke_Verify bet choies', async()=> {
         await SedieFunc.verifyBetChoices()
@@ -28,7 +27,7 @@ describe('Sedie Game Mobile',()=>{
 
     it('TC003_Full_Smoke_Verify Betting', async()=> {
         const Choice = ['Even','Odd','Red4','Red3','Red2','White3','White4']
-        const Chip = [1,5,10,50,100,200,500,1000,2000]
+        const Chip = [1,5,10,50,100,200,1,500,1000,2000]
         for(const chip of Chip) {
             if(chip < 500) await SedieFunc.waitToNextRound()
             for(const choice of Choice) {
@@ -49,9 +48,6 @@ describe('Sedie Game Mobile',()=>{
         await SedieFunc.verifyBlockBettingTime()
     })
 
-    it('TC005_Full_Smoke_Verify betting at settlement time', async() => {
-        await SedieFunc.verifyBettingAtSettleTime()
-    })
 
     it('TC006_Full_Smoke_Verify Min Max Bet', async()=> {
         await SedieFunc.verifyMaxBet()

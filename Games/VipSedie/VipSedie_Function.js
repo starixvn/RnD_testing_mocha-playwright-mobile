@@ -9,7 +9,7 @@ export const placeBet = async(_choice,_chip) => {
     await GameLobbyFunc.placeBet(VipSedieLocator[`${_choice}`].Choice,VipSedieLocator.Timer,VipSedieLocator[`${_choice}`].OwnBet,_chip)
 }
 export const verifyLoginSuccessfully = async() => {
-    await uiUtils.waitEl(VipSedieLocator.Title)
+    await uiUtils.shouldBeEqual(await uiUtils.getText(VipSedieLocator.Title), VipSedieLocator.VerifyText.vi.Title)
 }
 export const getRoundId = async() => {
     return await uiUtils.getText(VipSedieLocator.RoundId)
@@ -34,11 +34,12 @@ export const verifySettlement = async(_choice,_chip) => {
     await uiUtils.shouldBeEqual(await waitToNextRound(),true)
     await verifyPlaceBet(_choice,_chip)
     let currentBalance =  await GameLobbyFunc.getBalance()
-    console.log(currentBalance)
+    // console.log(currentBalance)
     // Wait to next Round
     await waitToNextRound()
+    await uiUtils.sleep(3000)
     let newBalance = await GameLobbyFunc.getBalance()
-    console.log(newBalance)
+    // console.log(newBalance)
     if(await uiUtils.isWin(VipSedieLocator[`${_choice}`].Choice) === true) {
         winloss = Math.round(_chip * VipSedieLocator.Odds[`${_choice}`])
     }
@@ -113,7 +114,7 @@ export const verifyBettingAtSettleTime = async() => {
 }
 
 export const verifyMinBet = async() => {
-    await GameLobbyFunc.selectChip(1)
+    await GameLobbyFunc.selectChip(10)
     const Choice = ['Even','Odd','Red4','Red3','Red2','White3','White4']
     await waitToNextRound()
     for(let choice of Choice){
@@ -162,7 +163,7 @@ export const verifyLastRoundResult = async()=> {
     await uiUtils.clickEl(VipSedieLocator.LastRoundHistory)
     // Verify Selector
     // Round ID
-    console.log(await uiUtils.getText(VipSedieLocator.ToolTips.lblRound))
+    // console.log(await uiUtils.getText(VipSedieLocator.ToolTips.lblRound))
     await uiUtils.shouldBeEqual(await uiUtils.getText(VipSedieLocator.ToolTips.lblRound),await roundId,"RoundID is incorrect")
     // Result
     await uiUtils.shouldBeEqual(await uiUtils.getText(VipSedieLocator.ToolTips.lblResult), result)
@@ -173,14 +174,18 @@ export const verifyLastRoundResult = async()=> {
 }
 
 export const openGameHistory = async() => {
-    await GameLobbyFunc.selectMenu(VipSedieLocator.btnMenu,VipSedieLocator.btnHistory,VipSedieLocator.History.Title,VipSedieLocator.VerifyText.vi.History)
+    await GameLobbyFunc.openHistory()
+    await GameLobbyFunc.selectGameOnHistory("VipSedie")
+}
+export const closeGameHistory = async() => {
+    await GameLobbyFunc.closeHistory()
 }
 export const openGameGuide = async()=> {
-    await GameLobbyFunc.selectMenu(VipSedieLocator.btnMenu,VipSedieLocator.btnGuide,VipSedieLocator.Guide.Title,VipSedieLocator.VerifyText.vi.Guide)
+    await GameLobbyFunc.openGuide()
+    await GameLobbyFunc.selectGameOnGuide("VipSedie")
 }
-
-export const closePopup = async() => {
-    await uiUtils.clickEl(VipSedieLocator.btnClosePopup)
+export const closeGameGuide = async() => {
+    await GameLobbyFunc.closeGuide()
 }
 
 export const verifyGameHistory = async(_choice,_chip) => {
@@ -216,8 +221,8 @@ export const verifyGameHistory = async(_choice,_chip) => {
     // Stake
     await uiUtils.shouldBeEqual(await uiUtils.getText(VipSedieLocator.History.LastStake),_chip.toString())
     // Winloss
-    await uiUtils.shouldBeEqual(await uiUtils.getText(VipSedieLocator.History.LastWinLoss).winloss)
-    await closePopup()
+    await uiUtils.shouldBeEqual(await uiUtils.getText(VipSedieLocator.History.LastWinLoss),winloss.toString())
+    await closeGameHistory()
 }
 
 export const verifyHistory = async(_chip) => {
@@ -232,12 +237,12 @@ export const verifyHistory = async(_chip) => {
 
 export const verifyGuide = async()=> {
     await openGameGuide()
-    // console.log(await uiUtils.getText(VipSedieLocator.Guide.Text))
-    await uiUtils.shouldBeEqual(await uiUtils.getText(VipSedieLocator.Guide.Text),VipSedieLocator.VerifyText.vi.GuideContent)
+    const content = await uiUtils.getContentFrame(VipSedieLocator.Guide.Frame, VipSedieLocator.Guide.Text)
+    await uiUtils.shouldBeEqual(content,VipSedieLocator.VerifyText.vi.GuideContent)
     // await uiUtils.shouldBeEqual("abc",(await uiUtils.getText(VipSedieLocator.Guide.Text)).toString())
-    await closePopup()
+    await closeGameGuide()
 }
 
 export const onQuickBet = async()=> {
-    if(await GameLobbyFunc.isOnQuickBet()  === true) await GameLobbyFunc.swicthQuickBet() 
+    if(isQB  === false) await GameLobbyFunc.swicthQuickBet() 
 }
