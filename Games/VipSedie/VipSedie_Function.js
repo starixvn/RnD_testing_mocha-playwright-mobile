@@ -81,7 +81,7 @@ export const verifyTotalTimeOfARound = async() => {
     await uiUtils.shouldBeEqual(await uiUtils.waitToTime(VipSedieLocator.Timer,'30'),true)
     const endtime = Date.now()
     let t = Math.round((endtime - starttime)/1000)
-    await uiUtils.shouldBeEqual(t === 39 || t === 40,true,`Verify total time of a round is 39s Failed, total time is: ${t}s`)
+    await uiUtils.shouldBeEqual(t === 36 || t === 37,true,`Verify total time of a round is 39s Failed, total time is: ${t}s`)
 }
 
 export const verifyShakingPlate = async() => {

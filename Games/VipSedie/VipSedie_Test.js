@@ -4,7 +4,7 @@ import { waitToTime } from '../../utils/uiUtils'
 import * as MemberSiteFunc from '../References/MemberSite_Function'
 import * as VipSedieFunc from './VipSedie_Function'
 
-describe('Vip Sedie Game Mobile',()=>{
+describe('Vip Sedie Mobile',()=>{
 
     before(async function(){
         await MemberSiteFunc.Login(game)
@@ -20,14 +20,14 @@ describe('Vip Sedie Game Mobile',()=>{
             addContext(this,`./Pictures/${game}_${__filename}.png` )
         }
     })
-    it('TC001_Full_Smoke_Verify Time of a round', async () => {
+    it('TC_001_Full_Smoke_Verify Time of a round', async () => {
         await VipSedieFunc.verifyTotalTimeOfARound()
     })  
-    it('TC002_Full_Smoke_Verify bet choies', async()=> {
+    it('TC_002_Full_Verify bet choies', async()=> {
         await VipSedieFunc.verifyBetChoices()
     })
 
-    it('TC003_Full_Smoke_Verify Betting', async()=> {
+    it('TC_003_Full_Verify Betting', async()=> {
         const Choice = ['Even','Odd','Red4','Red3','Red2','White3','White4']
         const Chip = [10,50,100,200,500,1000,2000,3000]
         for(const chip of Chip) {
@@ -49,40 +49,40 @@ describe('Vip Sedie Game Mobile',()=>{
 
 
 
-    // it('TC004_Full_Smoke_Verify betting at block betting time', async()=> {
+    // it('TC_004_Full_Smoke_Verify betting at block betting time', async()=> {
     //     await VipSedieFunc.verifyBlockBettingTime()
     // })
 
-    // it('TC005_Full_Smoke_Verify betting at settlement time', async() => {
+    // it('TC_005_Full_Smoke_Verify betting at settlement time', async() => {
     //     await VipSedieFunc.verifyBettingAtSettleTime()
     // })
 
 
-    it('TC006_Full_Smoke_Verify Min Max Bet', async()=> {
+    it('TC_006_Full_Verify Min Max Bet', async()=> {
         await VipSedieFunc.verifyMinBet()
         await VipSedieFunc.verifyMaxBet()
     })
 
-    it('TC007_Full_Smoke_Verify Max Per Round', async()=> {
+    it('TC_007_Full_Verify Max Per Round', async()=> {
         await VipSedieFunc.verifyMaxBetPerRound()
     })
 
-    it('TC008_Full_Smoke_Verify Settlement', async()=> {
+    it('TC_008_Full_Smoke_Verify Settlement', async()=> {
         // Hard chip = 10
         await VipSedieFunc.verifySettlementForAllChoice(10)
     })
 
-    it('TC009_Full_Smoke_Verify Statistics', async()=> {
+    it('TC_009_Full_Smoke_Verify Statistics', async()=> {
         await VipSedieFunc.verifyLastRoundResult()
         await VipSedieFunc.verifyStatisticBroad()
     })
 
-    it('TC010_Full_Smoke_Verify Game History', async()=> {
+    it('TC_010_Full_Smoke_Verify Game History', async()=> {
         // Hard Chip  = 10
         await VipSedieFunc.verifyHistory(10)
     })
 
-    it('TC011_Full_Smoke_Verify Game Guide', async()=>{
+    it('TC_011_Full_Verify Game Guide', async()=>{
         await VipSedieFunc.verifyGuide()
     })
 

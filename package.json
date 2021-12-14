@@ -15,8 +15,8 @@
         "babel-preset-stage-0": "^6.24.1",
         "chai": "4.2.0",
         "mocha": "8.1.3",
-        "mochawesome": "^6.2.1",
-        "playwright": "1.14.0",
+        "mochawesome": "^6.2.2",
+        "playwright": "1.16.3",
         "google-spreadsheet": "3.1.15",
         "websocket-as-promised": "2.0.1",
         "websocket": "1.0.33",
@@ -54,13 +54,14 @@
         ]
     },
     "scripts": {
-        "selGame": "cross-var mocha --timeout 0 Games/$npm_config_game/*_Test.js -r @babel/register --file ./Setup.js --file ./Teardown.js  --reporter mochawesome --reporter-options reportDir=Report ",
-        "selGameSub": "",
-        "full": "cross-var mocha --timeout 0 Games/**/*_Test.js -r @babel/register --file ./Setup.js --file ./Teardown.js  --reporter mochawesome --reporter-options reportDir=Report ",
+        "CI_SelGame_Smoke": "cross-var mocha --timeout 0 Games/$npm_config_game/*_Test.js -r @babel/register --fgrep Smoke_ --file ./Setup.js --file ./Teardown.js --reporter mochawesome --reporter-options reportDir=Report ",
+        "selGame_Full": "cross-var mocha --timeout 0 Games/$npm_config_game/*_Test.js -r @babel/register --fgrep Full_ --file ./Setup.js --file ./Teardown.js --reporter mochawesome --reporter-options reportDir=Report ",
+        "CI_SelGame_Full": "cross-var mocha --timeout 0 Games/**/*_Test.js -r @babel/register --file ./Setup.js --file ./Teardown.js  --reporter mochawesome --reporter-options reportDir=Report ",
         "smoke": "cross-var mocha --timeout 0 Games/**/*_Test.js  -r @babel/register  --fgrep Smoke_ --file ./Setup.js  --file ./Teardown.js  --reporter mochawesome --reporter-options reportDir=Report",
         "p_full": "cross-var mocha --timeout 0 Games/**/*_Test.js -r @babel/register  --require ./configParallel.js Games/**/*_Test.js --parallel -j 3 --reporter mochawesome --require mochawesome/register --reporter-options reportDir=Report ",
         "p_smoke": "cross-var mocha --timeout 0 Games/**/*_Test.js -r @babel/register  --fgrep Smoke --require ./configParallel.js Games/**/*_Test.js --parallel -j 3 --reporter mochawesome --require mochawesome/register --reporter-options reportDir=Report",
         "exportStatus": "cross-var mocha --timeout 0 Games/MarkTestCase/MarkTestCase.js -r @babel/register",
-        "sendResultToTelegram": "cross-var mocha --timeout 0 Games/SendResultToTelegram/*.js -r @babel/register "
-    }
+        "sendResultToTelegram": "cross-var mocha --timeout 0 utils/SendResultToTelegram/*.js -r @babel/register "
+    },
+    "dependencies": {}
 }

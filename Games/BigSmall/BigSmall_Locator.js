@@ -39,7 +39,7 @@ export const BigSmallLocator = {
         Dice3 : "//div[contains(@class,'game-list')]/div[4]//div[contains(@class,'big-small-result_result-3')]/img",
         Total : "//div[contains(@class,'game-list')]/div[4]//div[contains(@class,'big-small_total-points')]"
     },
-    Odds : 1.96,
+    Odds : 1.95,
     Big : {
         Choice : `//div[contains(@class,'game-list')]/div[4]//div[contains(@class,'bet-options_big')]/..`,
         Odds : `//div[contains(@class,'game-list')]/div[4]//div[contains(@class,'bet-options_big')]/../div[contains(@class,'bet-option_odd')]`,
