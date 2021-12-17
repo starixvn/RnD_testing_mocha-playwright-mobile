@@ -7,12 +7,14 @@ describe('Send Message', ()=>{
     it('Send Telegram', async () => {
         let obj = await gsutils.repareData_vn()
         let rs = await gsutils.prepareResult_vn(obj)
+        let _Atemp = rs.Result[0].TestSuite.split("Mobile")
+        let testuite = `📱${_Atemp[0]}`
         const args = await parseArg(process.env.npm_config_args)
         let env = await envToString((typeof args.env !== 'undefined') ? args.env : 'cf_local')
-        let mode = process.env.npm_config_mode
+        let mode = (typeof process.env.npm_config_mode !== 'undefined') ? process.env.npm_config_mode: 'Smoke'
         if(obj !== 'NotFound'){
-            let mainContent = await gsutils.isFailed(obj) === false ? ` ${rs.Result[0].TestSuite}: **PASSED**` : ` ${rs.Result[0].TestSuite}: **FAILED**` 
-            console.log(mainContent);
+            let mainContent = await gsutils.isFailed(obj) === false ? ` ${testuite}: ✅` : ` ${testuite}: ❌` 
+            // console.log(mainContent);
         // //#### TelegramBot
            chai.request("https://api.telegram.org")
             .post("/bot2088610410:AAFdYvdtV9h2AucxKqhA5oztPMwSBJIcO_s/sendMessage")
